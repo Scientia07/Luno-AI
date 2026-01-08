@@ -1,0 +1,24 @@
+# Luno-AI Backend Dependencies
+
+# Web Framework
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+
+# Data Validation
+pydantic>=2.5.0
+pydantic-settings>=2.1.0
+
+# YAML parsing
+pyyaml>=6.0.0
+
+# Vector Database (optional - falls back to keyword search)
+chromadb>=0.4.22
+
+# Database
+# SQLite is built into Python
+
+# Development
+python-multipart>=0.0.6  # For form data
+
+# Optional: Sentence embeddings (for ChromaDB)
+# sentence-transformers>=2.2.0  # Uncomment if using local embeddings
