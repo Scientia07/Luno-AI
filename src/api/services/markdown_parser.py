@@ -149,11 +149,11 @@ class MarkdownParser:
         layers = []
 
         layer_patterns = [
-            (0, r"L0|Layer\s*0|Overview|Introduction"),
-            (1, r"L1|Layer\s*1|Getting Started|Basics"),
-            (2, r"L2|Layer\s*2|Intermediate|Core Concepts"),
-            (3, r"L3|Layer\s*3|Advanced|Deep Dive"),
-            (4, r"L4|Layer\s*4|Expert|Production|Optimization"),
+            (0, r"L0|Layer\s*0"),
+            (1, r"L1|Layer\s*1"),
+            (2, r"L2|Layer\s*2"),
+            (3, r"L3|Layer\s*3"),
+            (4, r"L4|Layer\s*4"),
         ]
 
         layer_names = [
@@ -164,29 +164,101 @@ class MarkdownParser:
             "Production & Optimization"
         ]
 
-        for level, pattern in layer_patterns:
-            # Look for layer sections
-            section_pattern = rf"^##\s+.*?({pattern}).*?\n(.*?)(?=^##\s|\Z)"
-            match = re.search(section_pattern, content, re.MULTILINE | re.DOTALL | re.IGNORECASE)
+        # First try to find Learning Path section with ### subsections
+        learning_path = self.extract_section(content, "Learning Path")
+        if learning_path:
+            for level, pattern in layer_patterns:
+                # Look for ### L0:, ### L1:, etc. subsections
+                subsection_pattern = rf"^###\s+({pattern})[:\s].*?\n(.*?)(?=^###\s|\Z)"
+                match = re.search(subsection_pattern, learning_path, re.MULTILINE | re.DOTALL | re.IGNORECASE)
 
-            if match:
-                layer_content = match.group(2).strip()
-                checklist = self.extract_list_items(layer_content)
+                if match:
+                    layer_content = match.group(2).strip()
+                    checklist = self.extract_list_items(layer_content)
 
+                    layers.append(Layer(
+                        level=level,
+                        name=layer_names[level],
+                        content=layer_content,
+                        checklist_items=checklist[:10]  # Limit checklist items
+                    ))
+
+        # If no layers found in Learning Path, try ## sections
+        if not layers:
+            for level, pattern in layer_patterns:
+                # Look for ## L0, ## Layer 0, etc.
+                section_pattern = rf"^##\s+.*?({pattern}).*?\n(.*?)(?=^##\s|\Z)"
+                match = re.search(section_pattern, content, re.MULTILINE | re.DOTALL | re.IGNORECASE)
+
+                if match:
+                    layer_content = match.group(2).strip()
+                    checklist = self.extract_list_items(layer_content)
+
+                    layers.append(Layer(
+                        level=level,
+                        name=layer_names[level],
+                        content=layer_content,
+                        checklist_items=checklist[:10]
+                    ))
+
+        # If still no layers found, create default layers from content sections
+        if not layers:
+            # Create L0 from Overview
+            overview = self.extract_section(content, "Overview")
+            if overview:
                 layers.append(Layer(
-                    level=level,
-                    name=layer_names[level],
-                    content=layer_content,
-                    checklist_items=checklist[:10]  # Limit checklist items
+                    level=0,
+                    name="Overview",
+                    content=overview,
+                    checklist_items=self.extract_list_items(overview)[:5]
                 ))
 
-        # If no layers found, create a default L0 from overview
+            # Create L1 from Quick Start or Prerequisites
+            quick_start = self.extract_section(content, "Quick Start")
+            if quick_start:
+                layers.append(Layer(
+                    level=1,
+                    name="Getting Started",
+                    content=quick_start,
+                    checklist_items=self.extract_list_items(quick_start)[:5]
+                ))
+
+            # Create L2 from Full Setup or Core Concepts
+            full_setup = self.extract_section(content, "Full Setup")
+            if full_setup:
+                layers.append(Layer(
+                    level=2,
+                    name="Core Concepts",
+                    content=full_setup,
+                    checklist_items=self.extract_list_items(full_setup)[:5]
+                ))
+
+            # Create L3 from Code Examples
+            code_examples = self.extract_section(content, "Code Examples")
+            if code_examples:
+                layers.append(Layer(
+                    level=3,
+                    name="Advanced Topics",
+                    content=code_examples,
+                    checklist_items=self.extract_list_items(code_examples)[:5]
+                ))
+
+            # Create L4 from Troubleshooting or Integration
+            troubleshooting = self.extract_section(content, "Troubleshooting")
+            if troubleshooting:
+                layers.append(Layer(
+                    level=4,
+                    name="Production & Optimization",
+                    content=troubleshooting,
+                    checklist_items=self.extract_list_items(troubleshooting)[:5]
+                ))
+
+        # Ensure at least one layer exists
         if not layers:
-            overview = self.extract_section(content, "Overview") or content[:500]
             layers.append(Layer(
                 level=0,
                 name="Overview",
-                content=overview,
+                content=content[:1000] if len(content) > 1000 else content,
                 checklist_items=[]
             ))
 
