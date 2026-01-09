@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { Markdown } from "@/components/ui/markdown";
 import {
   ArrowLeft,
   BookOpen,
@@ -340,31 +339,8 @@ export default function TechnologyPage() {
                     <Separator />
 
                     {layer?.content ? (
-                      <ScrollArea className="h-[400px] pr-4">
-                        <div className="prose dark:prose-invert max-w-none">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                            {layer.content}
-                          </ReactMarkdown>
-                        </div>
-
-                        {layer.checklist_items && layer.checklist_items.length > 0 && (
-                          <div className="mt-6">
-                            <h4 className="font-medium mb-3">Checklist</h4>
-                            <div className="space-y-2">
-                              {layer.checklist_items.map((item, i) => (
-                                <div key={i} className="flex items-start gap-2">
-                                  <Checkbox id={`check-${level}-${i}`} />
-                                  <label
-                                    htmlFor={`check-${level}-${i}`}
-                                    className="text-sm text-muted-foreground cursor-pointer"
-                                  >
-                                    {item}
-                                  </label>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
+                      <ScrollArea className="h-[500px] pr-4">
+                        <Markdown content={layer.content} />
                       </ScrollArea>
                     ) : (
                       <div className="flex items-center justify-center h-32 text-muted-foreground">

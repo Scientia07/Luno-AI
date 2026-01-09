@@ -129,3 +129,148 @@ pre code {
 .prose blockquote {
   @apply border-l-4 border-muted-foreground/30 pl-4 italic my-4;
 }
+
+/* Syntax Highlighting - GitHub-like theme */
+.hljs {
+  color: hsl(var(--foreground));
+  background: transparent;
+}
+
+.hljs-comment,
+.hljs-quote {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-addition {
+  color: #d73a49;
+}
+
+.dark .hljs-keyword,
+.dark .hljs-selector-tag,
+.dark .hljs-addition {
+  color: #ff7b72;
+}
+
+.hljs-string,
+.hljs-doctag,
+.hljs-regexp {
+  color: #032f62;
+}
+
+.dark .hljs-string,
+.dark .hljs-doctag,
+.dark .hljs-regexp {
+  color: #a5d6ff;
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-attr {
+  color: #005cc5;
+}
+
+.dark .hljs-number,
+.dark .hljs-literal,
+.dark .hljs-variable,
+.dark .hljs-template-variable,
+.dark .hljs-tag .hljs-attr {
+  color: #79c0ff;
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id {
+  color: #6f42c1;
+  font-weight: bold;
+}
+
+.dark .hljs-title,
+.dark .hljs-section,
+.dark .hljs-selector-id {
+  color: #d2a8ff;
+}
+
+.hljs-function,
+.hljs-title.function_ {
+  color: #6f42c1;
+}
+
+.dark .hljs-function,
+.dark .hljs-title.function_ {
+  color: #d2a8ff;
+}
+
+.hljs-class .hljs-title,
+.hljs-type,
+.hljs-built_in {
+  color: #e36209;
+}
+
+.dark .hljs-class .hljs-title,
+.dark .hljs-type,
+.dark .hljs-built_in {
+  color: #ffa657;
+}
+
+.hljs-attr,
+.hljs-attribute {
+  color: #005cc5;
+}
+
+.dark .hljs-attr,
+.dark .hljs-attribute {
+  color: #79c0ff;
+}
+
+.hljs-name,
+.hljs-tag {
+  color: #22863a;
+}
+
+.dark .hljs-name,
+.dark .hljs-tag {
+  color: #7ee787;
+}
+
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: #d73a49;
+}
+
+.dark .hljs-meta,
+.dark .hljs-meta .hljs-keyword {
+  color: #ff7b72;
+}
+
+.hljs-deletion {
+  color: #b31d28;
+  background-color: #ffeef0;
+}
+
+.dark .hljs-deletion {
+  color: #ffdcd7;
+  background-color: #67060c;
+}
+
+.hljs-addition {
+  color: #22863a;
+  background-color: #f0fff4;
+}
+
+.dark .hljs-addition {
+  color: #aff5b4;
+  background-color: #033a16;
+}
+
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: bold;
+}
